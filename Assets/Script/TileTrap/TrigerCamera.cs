@@ -17,7 +17,7 @@ public class TrigerCamera : MonoBehaviour
 
             CameraController.Instance.SwitchingCamera(_camNeedToSwitch);
             _prevCamera.Follow = collision.transform;
-            collision.GetComponent<Player>().ResetData(pos.position);
+           
             GameManager.Instance.pos=pos.position;
             StartCoroutine(TransitionCamera(collision));
         }
@@ -33,13 +33,15 @@ public class TrigerCamera : MonoBehaviour
 
         
         CameraController.Instance.SwitchingCamera(_camNeedToSwitch);
+        yield return new WaitForSeconds(1f);
+        player.GetComponent<Player>().ResetData(GameManager.Instance.pos);
+        yield return new WaitForSeconds(1f);
        
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.5f);
         GameManager.Instance.transitionAnim.SetBool("Start", false);
         GameManager.Instance.transitionAnim.SetBool("End", true);
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
         player.GetComponent<PlayerInput>().enabled = true;
-        yield return new WaitForSeconds(1f);
         GameManager.Instance.transitionAnim.gameObject.SetActive(false);
 
 

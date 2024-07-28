@@ -10,6 +10,8 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] public Player player;
     [SerializeField] public Vector3 pos;
     public bool key;
+    [SerializeField] public GameObject door;
+    [SerializeField] public Sprite doorOpen;
     [SerializeField] public GameObject endGame;
     [Header("Orther")]
     [SerializeField] public Animator transitionAnim;
@@ -142,5 +144,5 @@ public class GameManager : Singleton<GameManager>
         transitionAnim.gameObject.SetActive(false);
     }
     #endregion
-  
+   
 }

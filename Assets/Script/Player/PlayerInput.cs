@@ -6,10 +6,29 @@ public class PlayerInput : MonoBehaviour
 {
     [Header("Movement")]
     public Vector2 moveInput;
-    public int inputX;
-    public int inputY;
+    public float inputX;
+    public float inputY;
     [Header("Jump")]
     public bool jumpInput;
+    PlayerController controller;
+    private void Awake()
+    {
+        controller = new PlayerController();
+        controller.Enable();
+        controller.Movement.Move.performed += tmp =>
+        {
+            inputX=tmp.ReadValue<float>();
+        };
+        controller.Movement.Direction.performed += tmp =>
+        {
+            inputY = tmp.ReadValue<float>();
+        };
+        moveInput = new Vector2(inputX, inputY);
+        controller.Movement.Jump.performed += tmp =>
+        {
+            jumpInput = true;
+        };
+    }
     public void MoveInput()
     {
         moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
@@ -22,10 +41,11 @@ public class PlayerInput : MonoBehaviour
         jumpInput = (Input.GetKeyDown(KeyCode.K) || Input.GetButton("Jump"));
 
     }
-    private void Update()
+    /*private void Update()
     {
-        MoveInput();
+        //MoveInput();
         JumpInput();
         
     }
+*/
 }

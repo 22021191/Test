@@ -62,6 +62,7 @@ public class TriggerSwitchCamera : MonoBehaviour
         player.GetComponent<PlayerInput>().enabled = true;
         yield return new WaitForSeconds(1f);
         GameManager.Instance.transitionAnim.gameObject.SetActive(false);
+        this.gameObject.GetComponent<Collider2D>().isTrigger = false;
 
 
     }

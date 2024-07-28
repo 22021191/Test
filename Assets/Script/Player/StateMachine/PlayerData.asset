@@ -40,3 +40,12 @@ MonoBehaviour:
   keyMask:
     serializedVersion: 2
     m_Bits: 512
+  dashMask:
+    serializedVersion: 2
+    m_Bits: 2048
+  dashSpeed: 32
+  dashLength: 0.2
+  wallJumpVelocity: 20
+  wallAngle: {x: 1, y: 2}
+  wallJumpTime: 0.2
+  sliceSpeed: 3

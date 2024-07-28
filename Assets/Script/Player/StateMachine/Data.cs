@@ -30,5 +30,17 @@ public class Data : ScriptableObject
     public LayerMask trapMask;
     public LayerMask reverseMask;
     public LayerMask keyMask;
+    public LayerMask dashMask;
 
+    [Header("Dash")]
+    public float dashSpeed;
+    public float dashLength;
+
+    [Header("Wall")]
+    public float wallJumpVelocity;
+    public Vector2 wallAngle = new Vector2(1, 2);
+    public float wallJumpTime;
+
+    [Header("Wall Slice")]
+    public float sliceSpeed = 3f;
 }

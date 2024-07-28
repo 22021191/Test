@@ -2342,6 +2342,8 @@ MonoBehaviour:
   player: {fileID: 0}
   pos: {x: 0, y: 0, z: 0}
   key: 0
+  door: {fileID: 0}
+  doorOpen: {fileID: 722401880, guid: 1315498c31bfbc94d89d0d0dbabd64da, type: 3}
   endGame: {fileID: 458830788}
   transitionAnim: {fileID: 2079491490}
   isTransition: 0

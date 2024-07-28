@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using Unity.IO.LowLevel.Unsafe;
 using Unity.VisualScripting;
 using UnityEditor;
+using UnityEditor.U2D;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
     [Header("PlayerData")]
     [SerializeField] private Data data;
+    [SerializeField] private GameObject door;
 
     #region Value
     [Header("Component")]
@@ -43,6 +45,9 @@ public class Player : MonoBehaviour
     public PlayerAirState airState;
     public PlayerJumpState jumpState;
     public PlayerMoveState moveState;
+    public PlayerWallJumpState wallJumpState;
+    public PlayerWallSliceState wallSliceState;
+    public PlayerDashState dashState;
     
     #endregion
 
@@ -56,13 +61,16 @@ public class Player : MonoBehaviour
         //Khoi tao StateMachine
         stateMachine = new PlayerStateMachine();
         GameManager.Instance.player=this;
+        GameManager.Instance.door = this.door;
 
         //Khoi tao Player State
         idleState = new PlayerIdleState(this, stateMachine, data, "Idle");
         airState = new PlayerAirState(this, stateMachine, data, "Jump");
         jumpState = new PlayerJumpState(this, stateMachine, data, "Jump");
         moveState = new PlayerMoveState(this, stateMachine, data, "Move");
-
+        wallJumpState = new PlayerWallJumpState(this, stateMachine, data, "Jump");
+        wallSliceState = new PlayerWallSliceState(this, stateMachine, data, "Jump");
+        dashState = new PlayerDashState(this, stateMachine, data, "Jump");
     }
 
     void Start()
@@ -126,7 +134,7 @@ public class Player : MonoBehaviour
     #endregion
 
     #region Check Functions
-    public void CheckFlip(int inputX)
+    public void CheckFlip(float inputX)
     {
         if (inputX != 0 && inputX != facingRight)
         {
@@ -152,6 +160,12 @@ public class Player : MonoBehaviour
             GameManager.Instance.key = true;
             Destroy(collision.gameObject);
             AudioManager.Instance.PlaySfx("Coin");
+            GameManager.Instance.door.GetComponent<Collider2D>().isTrigger = true;
+            GameManager.Instance.door.GetComponent<SpriteRenderer>().sprite = GameManager.Instance.doorOpen;
+        }
+        else if ((data.dashMask.value & (1 << collision.gameObject.layer)) != 0)
+        {
+            stateMachine.ChangeState(dashState);
         }
     }
     IEnumerator DelayReverse()
@@ -173,6 +187,15 @@ public class Player : MonoBehaviour
         return Physics2D.Raycast(groundCheck.position + data._groundRaycastOffset, Vector2.down*reverse, data.groundRadius, data.groundMask) ||
                     Physics2D.Raycast(groundCheck.position - data._groundRaycastOffset, Vector2.down*reverse, data.groundRadius, data.groundMask);
 
+    }
+    public bool WallFrontCheck()
+    {
+        return Physics2D.Raycast(boxCheck.position, Vector2.right * facingRight, data.boxDistance, data.groundMask);
+    }
+    public bool WallCheckBack()
+    {
+
+        return Physics2D.Raycast(boxCheck.position, Vector2.left * facingRight, data.boxDistance, data.groundMask);
     }
     public bool BoxCheck()
     {

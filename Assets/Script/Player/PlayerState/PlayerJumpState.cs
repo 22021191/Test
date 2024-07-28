@@ -19,6 +19,7 @@ public class PlayerJumpState : PlayerState
     public override void Enter()
     {
         base.Enter();
+        player.input.jumpInput = false;
         player.SetVelocityY(data.jumpForce*player.reverse);
         isAbilityDone = true;
         AudioManager.Instance.PlaySfx("Jump");

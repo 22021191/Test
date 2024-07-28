@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PlayerGroundState : PlayerState
 {
-    protected int inputX;
-    protected int inputY;
+    protected float inputX;
+    protected float inputY;
     protected bool onGround;
     protected bool jumpInput;
     public PlayerGroundState(Player player, PlayerStateMachine stateMachine, Data playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName)
@@ -35,6 +35,7 @@ public class PlayerGroundState : PlayerState
         jumpInput=player.input.jumpInput;
         if(jumpInput )
         {
+
             stateMachine.ChangeState(player.jumpState);
             return;
         }
